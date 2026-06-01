@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ProductController {
 
     private final AtomicLong idCounter = new AtomicLong(2);
-    private final List<Product> products = new ArrayList<>(
+    private final List<Product> products = new CopyOnWriteArrayList<>(
             List.of(new Product(1L, "Laptop", "15-inch laptop", new BigDecimal("1200.00"), "Electronics", true))
     );
 
@@ -32,7 +32,7 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public Product createProduct(@RequestBody Product product) {
         Product created = new Product(
-                product.id() != null ? product.id() : idCounter.getAndIncrement(),
+                idCounter.getAndIncrement(),
                 product.name(),
                 product.description(),
                 product.price(),
